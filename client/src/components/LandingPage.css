@@ -1,0 +1,154 @@
+.landing-page {
+    position: relative;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #c3dafe, #fbcfe8, #f0abfc);
+    overflow: hidden;
+  }
+  
+  .gradient-text {
+    background: linear-gradient(to right, #6366f1, #ec4899, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .btn-glass {
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(12px);
+    color: #4f46e5;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .btn-glass:hover {
+    background: rgba(255, 255, 255, 0.5);
+    color: #4338ca;
+  }
+  
+  /* Blobs */
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.4;
+    animation: blob 20s infinite ease-in-out;
+  }
+  
+  .blob.pink {
+    width: 300px;
+    height: 300px;
+    background: #f9a8d4;
+    top: -10%;
+    left: -10%;
+  }
+  
+  .blob.yellow {
+    width: 350px;
+    height: 350px;
+    background: #fde68a;
+    top: 20%;
+    right: -15%;
+  }
+  
+  .blob.purple {
+    width: 300px;
+    height: 300px;
+    background: #d8b4fe;
+    bottom: -10%;
+    left: 30%;
+    animation-delay: 5s;
+  }
+  
+  @keyframes blob {
+    0%, 100% {
+      transform: scale(1) translate(0, 0);
+    }
+    50% {
+      transform: scale(1.2) translate(30px, -20px);
+    }
+  }
+  
+  /* Fade-in and slide-up animation for image */
+.landing-image img {
+    opacity: 0;
+    animation: fadeSlideUp 1s ease forwards;
+    animation-delay: 0.2s;
+  }
+  
+  /* Fade-in and slide-up animation for text children with stagger */
+  .landing-text > * {
+    opacity: 0;
+    animation: fadeSlideUp 1s ease forwards;
+  }
+  
+  .landing-text h1 {
+    animation-delay: 0.4s;
+  }
+  
+  .landing-text h2 {
+    animation-delay: 0.6s;
+  }
+  
+  .landing-text p {
+    animation-delay: 0.8s;
+  }
+  
+  .landing-text a.btn-glass {
+    animation-delay: 1s;
+  }
+  
+  /* Keyframes for fade and slide */
+  @keyframes fadeSlideUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Update blob animation to float smoothly */
+  .blob {
+    animation: floatBlob 6s ease-in-out infinite;
+    filter: blur(80px); /* slightly softer */
+    opacity: 0.5;
+  }
+  
+  .blob.pink {
+    animation-delay: 0s;
+  }
+  
+  .blob.yellow {
+    animation-delay: 2s;
+  }
+  
+  .blob.purple {
+    animation-delay: 4s;
+  }
+  
+  @keyframes floatBlob {
+    0%, 100% {
+      transform: translateY(0) scale(1);
+      opacity: 0.5;
+    }
+    50% {
+      transform: translateY(-15px) scale(1.1);
+      opacity: 0.7;
+    }
+  }
+  
+  /* Button hover enhancements */
+  .btn-glass:hover {
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 24px rgba(138, 63, 252, 0.4);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+  }
+  .landing-page,
+.landing-image,
+.landing-text {
+  border: none !important;
+}
+
+
