@@ -48,112 +48,215 @@ export default function Dashboard() {
     }
   };
 
-  const handleUpload = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!file) return setError('Select an audio file first');
-    if (file.type !== 'audio/wav') return setError('Please upload a 16kHz WAV file');
-    setLoading(true);
-    setError(null);
+//   const handleUpload = async (e: React.FormEvent) => {
+//     e.preventDefault();
+//     if (!file) return setError('Select an audio file first');
+//     if (file.type !== 'audio/wav') return setError('Please upload a 16kHz WAV file');
+//     setLoading(true);
+//     setError(null);
 
-    try {
-      const form = new FormData();
-      form.append('file', file);
-      const res = await fetch('http://localhost:5001/transcribe', { method: 'POST', body: form });
-      if (!res.ok) throw new Error((await res.json()).error || 'Transcription failed');
-      const { text } = await res.json();
-      setTranscription(text);
-    } catch (e: any) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+//     try {
+//       const form = new FormData();
+//       form.append('file', file);
+//       const res = await fetch('http://localhost:5001/transcribe', { method: 'POST', body: form });
+//       if (!res.ok) throw new Error((await res.json()).error || 'Transcription failed');
+//       const { text } = await res.json();
+//       setTranscription(text);
+//     } catch (e: any) {
+//       setError(e.message);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
 
-  const handleSummarizeAndHighlight = async () => {
-    if (!transcription) return setError('No transcript available.');
-    setLoading(true);
-    setError(null);
-    try {
-      const [summaryRes, highlightRes] = await Promise.all([
-        fetch('http://localhost:5001/summarize', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: transcription })
-        }),
-        fetch('http://localhost:5001/highlight', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: transcription })
-        })
-      ]);
+//   const handleSummarizeAndHighlight = async () => {
+//     if (!transcription) return setError('No transcript available.');
+//     setLoading(true);
+//     setError(null);
+//     try {
+//       const [summaryRes, highlightRes] = await Promise.all([
+//         fetch('http://localhost:5001/summarize', {
+//           method: 'POST',
+//           headers: { 'Content-Type': 'application/json' },
+//           body: JSON.stringify({ text: transcription })
+//         }),
+//         fetch('http://localhost:5001/highlight', {
+//           method: 'POST',
+//           headers: { 'Content-Type': 'application/json' },
+//           body: JSON.stringify({ text: transcription })
+//         })
+//       ]);
 
-      if (!summaryRes.ok || !highlightRes.ok) throw new Error('Summary or Highlight request failed');
+//       if (!summaryRes.ok || !highlightRes.ok) throw new Error('Summary or Highlight request failed');
 
-      const { summary } = await summaryRes.json();
-      const { highlights } = await highlightRes.json();
+//       const { summary } = await summaryRes.json();
+//       const { highlights } = await highlightRes.json();
 
-      setSummary(summary);
-      setHighlights(highlights);
-      setShowModal(true);
-    } catch (e: any) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+//       setSummary(summary);
+//       setHighlights(highlights);
+//       setShowModal(true);
+//     } catch (e: any) {
+//       setError(e.message);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
   
-  const handleFlashcards = async () => {
-    if (!transcription) return;
-    setLoading(true);
-    try {
-      const res = await fetch('http://localhost:5001/flashcards', {
+//   const handleFlashcards = async () => {
+//     if (!transcription) return;
+//     setLoading(true);
+//     try {
+//       const res = await fetch('http://localhost:5001/flashcards', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({ text: transcription }),
+//       });
+  
+//       const data = await res.json();
+  
+//       let parsed = [];
+//       if (
+//         data.flashcards.length === 1 &&
+//         data.flashcards[0].answer &&
+//         typeof data.flashcards[0].answer === 'string'
+//       ) {
+//         try {
+//           const cleaned = data.flashcards[0].answer
+//             .replace(/'/g, '"')                      // Replace single quotes
+//             .replace(/,\s*}/g, '}')                  // Remove trailing commas in objects
+//             .replace(/,\s*]/g, ']')                  // Remove trailing commas in arrays
+//             .replace(/\n/g, '');                     // Remove newlines (optional cleanup)
+  
+//           parsed = JSON.parse(cleaned);
+//         } catch (err) {
+//           console.error('Flashcards JSON parse failed:', err);
+//           // Fallback to display something instead of crashing
+//           parsed = [
+//             {
+//               question: 'Error parsing flashcards',
+//               answer: data.flashcards[0].answer,
+//             },
+//           ];
+//         }
+//       } else {
+//         parsed = data.flashcards;
+//       }
+  
+//       console.log('Parsed flashcards:', parsed);
+//       setFlashcards(parsed);
+// setShowFlashcardModal(true); // instead of setShowModal
+//    // show modal
+//     } catch (error) {
+//       console.error('Flashcards error:', error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+  
+const BACKEND_URL = "https://listenlearn-ai-1.onrender.com";
+
+const handleUpload = async (e: React.FormEvent) => {
+  e.preventDefault();
+  if (!file) return setError('Select an audio file first');
+  if (file.type !== 'audio/wav') return setError('Please upload a 16kHz WAV file');
+  setLoading(true);
+  setError(null);
+
+  try {
+    const form = new FormData();
+    form.append('file', file);
+    const res = await fetch(`${BACKEND_URL}/transcribe`, { method: 'POST', body: form });
+    if (!res.ok) throw new Error((await res.json()).error || 'Transcription failed');
+    const { text } = await res.json();
+    setTranscription(text);
+  } catch (e: any) {
+    setError(e.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
+const handleSummarizeAndHighlight = async () => {
+  if (!transcription) return setError('No transcript available.');
+  setLoading(true);
+  setError(null);
+  try {
+    const [summaryRes, highlightRes] = await Promise.all([
+      fetch(`${BACKEND_URL}/summarize`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: transcription }),
-      });
-  
-      const data = await res.json();
-  
-      let parsed = [];
-      if (
-        data.flashcards.length === 1 &&
-        data.flashcards[0].answer &&
-        typeof data.flashcards[0].answer === 'string'
-      ) {
-        try {
-          const cleaned = data.flashcards[0].answer
-            .replace(/'/g, '"')                      // Replace single quotes
-            .replace(/,\s*}/g, '}')                  // Remove trailing commas in objects
-            .replace(/,\s*]/g, ']')                  // Remove trailing commas in arrays
-            .replace(/\n/g, '');                     // Remove newlines (optional cleanup)
-  
-          parsed = JSON.parse(cleaned);
-        } catch (err) {
-          console.error('Flashcards JSON parse failed:', err);
-          // Fallback to display something instead of crashing
-          parsed = [
-            {
-              question: 'Error parsing flashcards',
-              answer: data.flashcards[0].answer,
-            },
-          ];
-        }
-      } else {
-        parsed = data.flashcards;
+        body: JSON.stringify({ text: transcription })
+      }),
+      fetch(`${BACKEND_URL}/highlight`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: transcription })
+      })
+    ]);
+
+    if (!summaryRes.ok || !highlightRes.ok) throw new Error('Summary or Highlight request failed');
+
+    const { summary } = await summaryRes.json();
+    const { highlights } = await highlightRes.json();
+
+    setSummary(summary);
+    setHighlights(highlights);
+    setShowModal(true);
+  } catch (e: any) {
+    setError(e.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
+const handleFlashcards = async () => {
+  if (!transcription) return;
+  setLoading(true);
+  try {
+    const res = await fetch(`${BACKEND_URL}/flashcards`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: transcription }),
+    });
+
+    const data = await res.json();
+
+    let parsed = [];
+    if (
+      data.flashcards.length === 1 &&
+      data.flashcards[0].answer &&
+      typeof data.flashcards[0].answer === 'string'
+    ) {
+      try {
+        const cleaned = data.flashcards[0].answer
+          .replace(/'/g, '"')
+          .replace(/,\s*}/g, '}')
+          .replace(/,\s*]/g, ']')
+          .replace(/\n/g, '');
+
+        parsed = JSON.parse(cleaned);
+      } catch (err) {
+        console.error('Flashcards JSON parse failed:', err);
+        parsed = [
+          {
+            question: 'Error parsing flashcards',
+            answer: data.flashcards[0].answer,
+          },
+        ];
       }
-  
-      console.log('Parsed flashcards:', parsed);
-      setFlashcards(parsed);
-setShowFlashcardModal(true); // instead of setShowModal
-   // show modal
-    } catch (error) {
-      console.error('Flashcards error:', error);
-    } finally {
-      setLoading(false);
+    } else {
+      parsed = data.flashcards;
     }
-  };
-  
-  
+
+    setFlashcards(parsed);
+    setShowFlashcardModal(true);
+  } catch (error) {
+    console.error('Flashcards error:', error);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="container-fluid p-15" style={{ paddingLeft: '3.5rem', paddingRight: '3.5rem' }}>
