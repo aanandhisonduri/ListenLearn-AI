@@ -14,9 +14,9 @@ export default function Navbar() {
           <Link href="/" className="btn btn-outline-light me-2">
             Home
           </Link>
-          <Link href="/login" className="btn btn-outline-light me-2">
+          {/* <Link href="/login" className="btn btn-outline-light me-2">
             Login
-          </Link>
+          </Link> */}
           <Link href="/dashboard" className="btn btn-outline-light">
             Dashboard
           </Link>

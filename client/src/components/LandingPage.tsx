@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import './LandingPage.css'; // custom CSS
 
 export default function LandingPage() {
@@ -29,9 +30,10 @@ export default function LandingPage() {
         <p className="lead text-secondary mb-4">
           Upload audio, get instant summaries and flashcards. Learn efficiently, listen deeply.
         </p>
-        <a href="/dashboard" className="btn btn-lg btn-glass">
+        <Link href="/dashboard
+        " className="btn btn-lg btn-glass">
           Get Started
-        </a>
+        </Link>
       </div>
     </section>
   );

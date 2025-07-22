@@ -10,7 +10,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="blob pink"></div>
         <div className="blob yellow"></div>
         <div className="blob purple"></div>
-
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
